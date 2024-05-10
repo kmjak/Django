@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'hello/css/style.css' %}"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.css" crossorigin="anonymous">
+    <title>{{title}}</title>
+</head>
+<body class="container">
+    <h1 class="display-4 text-primary mb-4">{{title}}</h1>
+    <p class="h6 m5-4">{{message|safe}}</p>
+    <form action="{% url 'index' %}" method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="click" class="btn btn-primary">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
