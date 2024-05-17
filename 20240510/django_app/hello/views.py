@@ -166,6 +166,6 @@ class HelloView(TemplateView):
     def post(self,request):
         ses = request.POST['session']
         self.params['result'] = "send : '" + ses + "'."
-        request.session['last_msg'] = ses
+        # request.session['last_msg'] = ses    なんかエラー出る
         self.params['form'] = SessionForm(request.POST)
         return render(request,"hello/index.html",self.params)
