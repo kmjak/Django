@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .forms import SessionForm
+# from .forms import SessionForm
+from .models import Friend
+from .forms import SearchForm
 
 ## getリクエストの受け取り方
 # Create your views here.
@@ -153,19 +155,49 @@ from .forms import SessionForm
 #         return render(request,"hello/index.html",self.params)
 
 ## session 
-class HelloView(TemplateView):
-    def __init__(self):
-        self.params = {
-            'title':'',
-            'form':SessionForm(),
-            'result':None
-        }
-    def get(self,request):
-        self.params['result'] = request.session.get('last_msg','No message')
-        return render(request,"hello/index.html",self.params)
-    def post(self,request):
-        ses = request.POST['session']
-        self.params['result'] = "send : '" + ses + "'."
-        # request.session['last_msg'] = ses    なんかエラー出る
-        self.params['form'] = SessionForm(request.POST)
-        return render(request,"hello/index.html",self.params)
+# class HelloView(TemplateView):
+#     def __init__(self):
+#         self.params = {
+#             'title':'',
+#             'form':SessionForm(),
+#             'result':None
+#         }
+#     def get(self,request):
+#         self.params['result'] = request.session.get('last_msg','No message')
+#         return render(request,"hello/index.html",self.params)
+#     def post(self,request):
+#         ses = request.POST['session']
+#         self.params['result'] = "send : '" + ses + "'."
+#         request.session['last_msg'] = ses
+#         self.params['form'] = SessionForm(request.POST)
+#         self.params['s'] = request.session.keys()
+#         return render(request,"hello/index.html",self.params)
+
+## ミドルウェア
+def sample_middleware(get_response):
+
+    def middleware(request):
+        counter = request.session.get('counter',0)
+        request.session['counter'] = counter + 1
+        response = get_response(request)
+        print("count:" + str(counter))
+        return response
+    return middleware
+
+def index(request):
+    data = Friend.objects.all()
+    params = {
+        'title':'Hello',
+        'message':'all friends',
+        'form':SearchForm(),
+        'data':Friend.objects.all(),
+    }
+    if(request.method == "POST"):
+        num = request.POST['id']
+        try:
+            item = Friend.objects.get(id=num)
+            params['data'] = [item]
+        except:
+            pass
+        params['form'] = SearchForm(request.POST)
+    return render(request,"hello/index.html",params)

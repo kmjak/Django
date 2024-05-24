@@ -54,5 +54,12 @@ from django import forms
 #     choice = forms.MultipleChoiceField(label="radio",choices=data,widget=forms.SelectMultiple(attrs={'size':'5','class':'form-select'}))
 
 ## session
-class SessionForm(forms.Form):
-    session = forms.CharField(label="session", required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+# class SessionForm(forms.Form):
+#     session = forms.CharField(label="session", required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+
+# class SessionForm(forms.Form):
+#     session = forms.CharField(label='session',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+
+## database
+class SearchForm(forms.Form):
+    id = forms.IntegerField(label="id")
