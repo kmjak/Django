@@ -4,6 +4,9 @@ from django.views.generic import TemplateView
 # from .forms import SessionForm
 from .models import Friend
 from .forms import SearchForm
+# from .forms import HelloForm
+from .forms import FriendForm
+from django.shortcuts import redirect
 
 ## getリクエストの受け取り方
 # Create your views here.
@@ -201,3 +204,28 @@ def index(request):
             pass
         params['form'] = SearchForm(request.POST)
     return render(request,"hello/index.html",params)
+
+def create(request):
+    if(request.method == "POST"):
+        obj = Friend()
+        friend = FriendForm(request.POST,instance=obj)
+        friend.save()
+        return redirect(to="/hello")
+    params={
+        "title":"Hello",
+        "form":FriendForm(),
+        # "form":HelloForm(),
+    }
+    # if(request.method=="POST"):
+    #     name = request.POST['name']
+    #     mail = request.POST['mail']
+    #     gender = "gender" in request.POST
+    #     age = request.POST['age']
+    #     birthday = request.POST['birthday']
+    #     friend = Friend(name=name,mail=mail,gender=gender,age=age,birthday=birthday)
+
+    #     friend.save()
+        
+    #     return redirect(to="/hello")
+
+    return render(request,"hello/create.html",params)

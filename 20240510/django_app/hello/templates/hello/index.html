@@ -16,7 +16,16 @@
         {{ form }}
         <input type="submit" value="click">
     </form>
-    <table class="table">
+    <table>
+        <th>data</th>
+        {% for item in data %}
+        <tr>
+            <td>{{ item }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- <table class="table">
         <tr>
             <th>ID</th>
             <th>NAME</th>
@@ -38,6 +47,6 @@
             <td>{{item.birthday}}</td>
         </tr>
         {% endfor %}
-    </table>
+    </table> -->
 </body>
 </html>

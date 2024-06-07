@@ -9,4 +9,5 @@ urlpatterns = [
     # path('next', views.next, name='next'),
     # path('test', views.test, name='test'),
     # path('',HelloView.as_view(),name="index")
+    path('create',views.create,name="create")
 ]

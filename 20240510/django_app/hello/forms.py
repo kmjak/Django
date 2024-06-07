@@ -1,4 +1,5 @@
 from django import forms
+from .models import Friend
 
 # class HelloForm(forms.Form):
 #     name = forms.CharField(label="name", widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -63,3 +64,16 @@ from django import forms
 ## database
 class SearchForm(forms.Form):
     id = forms.IntegerField(label="id")
+
+class HelloForm(forms.Form):
+    name = forms.CharField(label="名前",widget=forms.TextInput(attrs={'class':'form-control'}))
+    mail = forms.CharField(label="メールアドレス",widget=forms.TextInput(attrs={'class':'form-control'}))
+    gender = forms.BooleanField(label="性別",required=False,widget=forms.CheckboxInput(attrs={'class':'form-check'}))
+    age = forms.IntegerField(label="年齢",widget=forms.NumberInput(attrs={'class':'form-control'}))
+    birthday = forms.DateField(label="誕生日",widget=forms.DateInput(attrs={'class':'form-control'}))
+
+## modelsをもとにしたformの作り方
+class FriendForm(forms.ModelForm):
+    class Meta:
+        model = Friend
+        fields = ['name','mail','gender','age','birthday']
