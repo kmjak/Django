@@ -77,3 +77,4 @@ class FriendForm(forms.ModelForm):
     class Meta:
         model = Friend
         fields = ['name','mail','gender','age','birthday']
+        labels = {'name':"名前",'mail':"メール",'gender':"性別",'age':"年齢",'birthday':"誕生日"}

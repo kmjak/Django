@@ -16,11 +16,12 @@
         {{ form }}
         <input type="submit" value="click">
     </form>
-    <table>
-        <th>data</th>
+    <table class="table">
         {% for item in data %}
         <tr>
             <td>{{ item }}</td>
+            <td><a href="{% url 'edit' item.id %}">更新</a></td>
+            <td><a href="{% url 'delete' item.id %}">削除</a></td>
         </tr>
         {% endfor %}
     </table>

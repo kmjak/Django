@@ -1,12 +1,15 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
+
 from django.http import HttpResponse
-from django.views.generic import TemplateView
+
+from django.views.generic import ListView
+from django.views.generic import DetailView
 # from .forms import SessionForm
 from .models import Friend
 from .forms import SearchForm
 # from .forms import HelloForm
 from .forms import FriendForm
-from django.shortcuts import redirect
 
 ## getリクエストの受け取り方
 # Create your views here.
@@ -229,3 +232,39 @@ def create(request):
     #     return redirect(to="/hello")
 
     return render(request,"hello/create.html",params)
+
+
+
+def edit(request,id):
+    obj = Friend.objects.get(id=id)
+    if(request.method == "POST"):
+        friend = FriendForm(request.POST,instance=obj)
+        friend.save()
+        return redirect(to="/hello")
+    params={
+        "title":"Hello",
+        "form":FriendForm(instance=obj),
+        "id":id,
+        # "form":HelloForm(),
+    }
+    return render(request,"hello/edit.html",params)
+
+def delete(request,id):
+    obj = Friend.objects.get(id=id)
+    if(request.method == "POST"):
+        obj.delete()
+        return redirect(to="/hello")
+    params={
+        "title":"Hello",
+        "obj":obj,
+        "id":id,
+        # "form":HelloForm(),
+    }
+    return render(request,"hello/delete.html",params)
+
+class FriendList(ListView):
+    model = Friend
+
+
+class FriendDetail(DetailView):
+    model = Friend
