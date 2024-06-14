@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'items/css/style.css' %}" type="text/css">
+    <title>商品一覧ページ</title>
+</head>
+<body class="list">
+    <h1 class="text-center title">商品一覧ページ</h1>
+    <table class="table">
+        <tr>
+            <th>商品番号</th>
+            <th>商品名</th>
+            <th></th>
+        </tr>
+        {% for item in object_list %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td><a href="/items/detail/{{ item.id }}">detail</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href="{% url 'index' %}" class="text-center"><h3>index</h3></a>
+</body>
+</html>

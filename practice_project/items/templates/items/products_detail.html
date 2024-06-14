@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'items/css/style.css' %}" type="text/css">
+    <title>{{ objectname }}詳細</title>
+</head>
+<body class="detail">
+    <h1 class="text-center title">{{ object.name }}詳細ページ</h1>
+    <table class="table">
+        <tr>
+            <th>id</th>
+            <td>{{ object.id }}</td>
+        </tr>
+        <tr>
+            <th>商品名</th>
+            <td>{{ object.name }}</td>
+        </tr>
+        <tr>
+            <th>価格</th>
+            <td>{{ object.price }}</td>
+        </tr>
+        <tr>
+            <th>在庫</th>
+            <td>{{ object.stack }}</td>
+        </tr>
+        <tr>
+            <th>カテゴリー</th>
+            <td>{{ object.category }}</td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'edit' object.id %}">更新</a></td>
+            <td><a href="{% url 'delete' object.id %}">削除</a></td>
+        </tr>
+    </table>
+    <a href="{% url 'list' %}" class="text-center"><h3>list</h3></a>
+</body>
+</html>
