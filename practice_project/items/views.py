@@ -30,6 +30,15 @@ class ProductsList(ListView):
 class ProductsDetail(DetailView):
     model = Products
 
+def detail(request):
+    try:
+        p_id = request.POST["p_id"]
+        obj = Products.objects.get(id=p_id)
+        params = {"object":obj}
+        return render(request,"items/products_detail.html",params)
+    except:
+        return redirect(to="/items/list")
+
 def edit(request,p_id):
     obj = Products.objects.get(id=p_id)
     if request.method == "POST":

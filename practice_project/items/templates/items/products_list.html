@@ -10,6 +10,11 @@
 </head>
 <body class="list">
     <h1 class="text-center title">商品一覧ページ</h1>
+    <form action="{% url 'detail' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="p_id">
+        <input type="submit" value="click">
+    </form>
     <table class="table">
         <tr>
             <th>商品番号</th>
