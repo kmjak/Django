@@ -12,7 +12,7 @@
     <h1 class="text-center title">商品一覧ページ</h1>
     <form action="{% url 'detail' %}" method="POST">
         {% csrf_token %}
-        <input type="text" name="p_id">
+        <input type="text" name="search">
         <input type="submit" value="click">
     </form>
     <table class="table">

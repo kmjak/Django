@@ -4,6 +4,7 @@ from . import views
 from .views import FriendList, FriendDetail
 
 urlpatterns = [
+    path('find',views.find, name="find"),
     # path('<int:id>/<nickname>/', views.index, name='index'),
     path('', views.index, name='index'),
     # path('form', views.form, name='form'),

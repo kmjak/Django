@@ -10,6 +10,9 @@ from .models import Friend
 from .forms import SearchForm
 # from .forms import HelloForm
 from .forms import FriendForm
+from .forms import FindForm
+
+from django.db.models import Q
 
 ## getリクエストの受け取り方
 # Create your views here.
@@ -268,3 +271,20 @@ class FriendList(ListView):
 
 class FriendDetail(DetailView):
     model = Friend
+
+
+## 検索をマスターしよう
+def find(request):
+    params = {
+        'title':'Hello/Find',
+        'msg':"search word..",
+        'form': FindForm(),
+        'data':Friend.objects.all(),
+    }
+    if request.method == "POST":
+        params["form"] = FindForm(request.POST)
+        find = request.POST['find']
+        params["data"] = Friend.objects.filter(Q(name__icontains=find)|Q(mail__icontains=find))
+        params["msg"] = 'Result:' + str(params["data"].count())
+
+    return render(request,'hello/find.html',params)

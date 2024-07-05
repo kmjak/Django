@@ -8,4 +8,4 @@ class ProductsForm(forms.ModelForm):
         labels = {'name':"商品名",'price':"価格",'stack':"在庫",'category':"カテゴリー"}
 
 class SearchForm(forms.Form):
-    p_id = forms.IntegerField(label="id")
+    search = forms.CharField(label="search")
