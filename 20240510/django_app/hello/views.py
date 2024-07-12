@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-
+from django.db.models import Count
+from django.db.models import Sum
+from django.db.models import Avg
+from django.db.models import Max
+from django.db.models import Min
 from django.http import HttpResponse
 
 from django.views.generic import ListView
@@ -11,6 +15,7 @@ from .forms import SearchForm
 # from .forms import HelloForm
 from .forms import FriendForm
 from .forms import FindForm
+from .forms import CheckForm
 
 from django.db.models import Q
 
@@ -195,11 +200,16 @@ def sample_middleware(get_response):
 
 def index(request):
     data = Friend.objects.all()
+    msg = str(Friend.objects.aggregate(Count('age')))
+    msg += "<br>" + str(Friend.objects.aggregate(Sum('age')))
+    msg += "<br>" + str(Friend.objects.aggregate(Avg('age')))
+    msg += "<br>" + str(Friend.objects.aggregate(Min('age')))
+    msg += "<br>" + str(Friend.objects.aggregate(Max('age')))
     params = {
         'title':'Hello',
-        'message':'all friends',
+        'message': msg,
         'form':SearchForm(),
-        'data':Friend.objects.all(),
+        'data':data,
     }
     if(request.method == "POST"):
         num = request.POST['id']
@@ -284,7 +294,29 @@ def find(request):
     if request.method == "POST":
         params["form"] = FindForm(request.POST)
         find = request.POST['find']
-        params["data"] = Friend.objects.filter(Q(name__icontains=find)|Q(mail__icontains=find))
-        params["msg"] = 'Result:' + str(params["data"].count())
+        l = find.split()
+        sql = 'select * from hello_friend'
+        # params["data"] = Friend.objects.filter(Q(name__icontains=find)|Q(mail__icontains=find))
+        # params["data"] = Friend.objects.all()[int(l[0]):int(l[1])]
+        if(find):
+            sql += ' where name like "%' + find +'%"'
+        params["data"] = Friend.objects.raw(sql)
+        # params["msg"] = 'Result:' + str(params["data"].count())
 
     return render(request,'hello/find.html',params)
+
+def check(request):
+    params = {
+        'title':'Hello',
+        'message':'check validation',
+        'form':FriendForm()
+    }
+    if request.method == "POST":
+        obj = Friend()
+        form = FriendForm(request.POST,instance=obj)
+        params['form'] = form
+        if (form.is_valid()):
+            params['message'] = 'OK!'
+        else:
+            params['message'] = 'no good'
+    return render(request,'hello/check.html',params)

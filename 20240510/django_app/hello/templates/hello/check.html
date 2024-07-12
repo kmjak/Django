@@ -11,19 +11,19 @@
 <body class="container">
     <h1 class="display-4 text-primary mb-4">{{title}}</h1>
     <p class="h6 m5-4">{{message|safe}}</p>
-    <form action="{% url 'index' %}" method="POST">
+    {% for item in form %}
+    <ol class="list-group">
+        <li class="list-group-item">
+            {{item.name}}({{item.value}}):{{item.errors.as_text}}
+        </li>
+        {% endfor %}
+    </ol>
+    <form action="{% url 'check' %}" method="POST">
         {% csrf_token %}
-        {{ form }}
+        <table class="table">
+            {{ form.as_table }}
+        </table>
         <input type="submit" value="click">
     </form>
-    <table class="table">
-        {% for item in data %}
-        <tr>
-            <td>{{ item }}</td>
-            <td><a href="{% url 'edit' item.id %}">更新</a></td>
-            <td><a href="{% url 'delete' item.id %}">削除</a></td>
-        </tr>
-        {% endfor %}
-    </table>
 </body>
 </html>
