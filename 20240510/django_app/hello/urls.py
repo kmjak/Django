@@ -16,5 +16,8 @@ urlpatterns = [
     path('delete/<int:id>',views.delete,name="delete"),
     path('list',FriendList.as_view(),name="list"),
     path('detail/<int:pk>',FriendDetail.as_view(),name="detail"),
-    path('check',views.check,name="check")
+    path('check',views.check,name="check"),
+    path('<int:num>', views.index, name='index'),
+    path('message/', views.message, name='message'),
+    path('message/<int:page>', views.message, name='message'),
 ]

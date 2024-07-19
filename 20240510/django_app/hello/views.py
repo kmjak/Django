@@ -6,17 +6,18 @@ from django.db.models import Avg
 from django.db.models import Max
 from django.db.models import Min
 from django.http import HttpResponse
-
+from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.views.generic import DetailView
 # from .forms import SessionForm
 from .models import Friend
+from .models import Message
 from .forms import SearchForm
 # from .forms import HelloForm
 from .forms import FriendForm
 from .forms import FindForm
 from .forms import CheckForm
-
+from .forms import MessageForm
 from django.db.models import Q
 
 ## getリクエストの受け取り方
@@ -198,28 +199,28 @@ def sample_middleware(get_response):
         return response
     return middleware
 
-def index(request):
-    data = Friend.objects.all()
-    msg = str(Friend.objects.aggregate(Count('age')))
-    msg += "<br>" + str(Friend.objects.aggregate(Sum('age')))
-    msg += "<br>" + str(Friend.objects.aggregate(Avg('age')))
-    msg += "<br>" + str(Friend.objects.aggregate(Min('age')))
-    msg += "<br>" + str(Friend.objects.aggregate(Max('age')))
-    params = {
-        'title':'Hello',
-        'message': msg,
-        'form':SearchForm(),
-        'data':data,
-    }
-    if(request.method == "POST"):
-        num = request.POST['id']
-        try:
-            item = Friend.objects.get(id=num)
-            params['data'] = [item]
-        except:
-            pass
-        params['form'] = SearchForm(request.POST)
-    return render(request,"hello/index.html",params)
+# def index(request):
+#     data = Friend.objects.all()
+#     msg = str(Friend.objects.aggregate(Count('age')))
+#     msg += "<br>" + str(Friend.objects.aggregate(Sum('age')))
+#     msg += "<br>" + str(Friend.objects.aggregate(Avg('age')))
+#     msg += "<br>" + str(Friend.objects.aggregate(Min('age')))
+#     msg += "<br>" + str(Friend.objects.aggregate(Max('age')))
+#     params = {
+#         'title':'Hello',
+#         'message': msg,
+#         'form':SearchForm(),
+#         'data':data,
+#     }
+#     if(request.method == "POST"):
+#         num = request.POST['id']
+#         try:
+#             item = Friend.objects.get(id=num)
+#             params['data'] = [item]
+#         except:
+#             pass
+#         params['form'] = SearchForm(request.POST)
+#     return render(request,"hello/index.html",params)
 
 def create(request):
     if(request.method == "POST"):
@@ -320,3 +321,27 @@ def check(request):
         else:
             params['message'] = 'no good'
     return render(request,'hello/check.html',params)
+
+def index(request,num=1):
+    data = Friend.objects.all()
+    page = Paginator(data,3)
+    params ={
+        'title':'Hello',
+        'message':str(num) + "ページ",
+        'data':page.get_page(num),
+    }
+    return render(request, 'hello/index.html',params)
+
+def message(request,page=1):
+    if request.method == "POST":
+        obj = Message()
+        form = MessageForm(request.POST, instance=obj)
+        form.save()
+    data = Message.objects.all().reverse()
+    paginator = Paginator(data,2)
+    params = {
+        'title': 'Message',
+        'form': MessageForm(),
+        'data': paginator.get_page(page),
+    }
+    return render(request, 'hello/message.html',params)
