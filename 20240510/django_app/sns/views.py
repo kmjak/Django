@@ -27,7 +27,7 @@ def index(request,page=1):
 
 @login_required(login_url='/admin/login/')
 def goods(request):
-    goods = Good.objets.filter(owner=request.user).all()
+    goods = Good.objects.filter(owner=request.user).all()
 
     params = {
         'login_user':request.user,
@@ -39,11 +39,11 @@ def goods(request):
 def post(request):
     if request.method == "POST":
         content = request.POST['content']
-        msg = message()
+        msg = Message()
         msg.owner =  request.user
         msg.content = content
         msg.save()
-        return redirect(to='/sls/')
+        return redirect(to='/sns/')
     else:
         messages = Message.objects.filter(owner=request.user).all()
         params = {
