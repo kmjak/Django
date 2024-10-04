@@ -33,9 +33,9 @@ def lastPage(request):
 @login_required(login_url='/admin/login/')
 def userName(request,user_id= -1):
     if user_id == -1:
-        usr = request.user
+        user = request.user
     else:
-        User.objects.filter(id=user_id).filter()
+        user = User.objects.filter(id=user_id).filter()
     return JsonResponse({"result":"OK","value":user.username})
 
 @login_required(login_url='/admin/login/')
@@ -44,24 +44,24 @@ def post(request):
         byte_data = request.body.decode('utf-8')
         json_data = json.loads(byte_data)
         msg = Message2()
-        msg.user = request.user
+        msg.owner = request.user
         msg.message = request.user.username
         msg.content = json_data['content']
         msg.save()
-        return JsonResponse("OK")
+        return JsonResponse({"result":"OK"})
     else:
-        return JsonResponse("NG")
+        return JsonResponse({"result":"NG"})
 
 @login_required(login_url='/admin/login/')
 def good(request,msg_id):
     msg = Message2.objects.get(id=msg_id)
     is_good = Good2.objects.filter(owner=request.user).filter(message=msg).count()
     if is_good > 0:
-        return JsonResponse("NG")
+        return JsonResponse({"result":"NG"})
     msg.good_count += 1
     msg.save()
     good = Good2()
     good.owner = request.user
     good.message = msg
     good.save()
-    return JsonResponse("OK")
+    return JsonResponse({"result":"OK"})
