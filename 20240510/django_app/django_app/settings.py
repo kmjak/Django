@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'hello',
     'sns',
     'api',
+    'sample_user1',
 ]
 
 MIDDLEWARE = [
