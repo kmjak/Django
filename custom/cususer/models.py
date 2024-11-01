@@ -6,7 +6,6 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomeUser(AbstractUser):
-
     address = models.CharField(max_length=200)
     telno = models.CharField(max_length=200)
     
